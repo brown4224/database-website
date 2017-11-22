@@ -74,42 +74,54 @@ $link = mysqli_connect("localhost:3306", "root", "pass", "yelp_db");  //Don't do
 
 
 			$result = mysqli_query($link, $query);
+			?>
 
-			// Create Table
-			echo "<div class='table-responsive'>";
-			echo "<table class='table' style='width:100%''> <tr><th>". $val_1. "</th><th>".$val_2."</th><th>".$val_3."</th><th>".$val_4."</th><th>"."zip"."</th></tr></br>";
+
+
+			<div class='table-responsive'>
+
+
+
+				<div id="toolbar-business" class="input-group input-group-sm">
+					<input id="toolbar-text-business" type="text" class="form-control" placeholder="Search Businesses..."></input>
+					<span class="input-group-btn">
+						<button onclick="filter(document.getElementById('toolbar-text-business').value)" id='toolbar-button-business' type="button" class="btn btn-default dropdown">Filter</button>
+					</span>
+				</div>
+				<?php
+				echo "<table class='table' style='width:100%''> <tr><th>". $val_1. "</th><th>".$val_2."</th><th>".$val_3."</th><th>".$val_4."</th><th>"."zip"."</th></tr></br>";
 
 
   			// output data of each row
-  			$rowID = 0;
-			if ($result->num_rows > 0) {
-				while($row = $result->fetch_assoc()) {
+				$rowID = 0;
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_assoc()) {
 
 
-					echo "<tr id='".$rowID."'  onclick='toggle(". ($rowID +1) .",". ($rowID + 2).")'> <td>" . $row[$val_1] . "</td><td>" . $row[$val_2] . "</td><td>" . $row[$val_3] . "</td><td>" . $row[$val_4] .  "</td><td>".$row[$val_5]."</td></tr>";
-					$rowID++;
-					if($row['is_open'] == 1){$open = 'Open';} else{$open = 'Closed';}
-					echo "<tr id='".$rowID."'  class='hide'  onclick='toggle(". ($rowID) .",". ($rowID + 1).")'><td><b>ID:</b> ".$row['id']."</td><td><b>Neighborhood: </b>".$row['neighborhood']."</td><td><b>Address: </b>".$row['address']."</td></tr>";
-					$rowID++;
-					echo "<tr id='".$rowID."' class='hide' onclick='toggle(". ($rowID - 1) .",". ($rowID).")'><td><b>Latitude: </b>".$row['latitude']."</td><td><b>longitude: </b>".$row['longitude']."</td><td><b>Review Count: </b>".$row['review_count']."</td><td><b>".$open."</b></td></tr>";
-					$rowID++;
+						echo "<tr class='' name='results' id='". $row['name']."'  onclick='toggle(". ($rowID + 1) .", ". ($rowID + 2).")'> <td>" . $row[$val_1] . "</td><td>" . $row[$val_2] . "</td><td>" . $row[$val_3] . "</td><td>" . $row[$val_4] .  "</td><td>".$row[$val_5]."</td></tr>";
+						$rowID++;
+						if($row['is_open'] == 1){$open = 'Open';} else{$open = 'Closed';}
+						echo "<tr id='".$rowID."'  class='hide' name='results-sublist'  onclick='toggle(". ($rowID) .", ". ($rowID + 1).")'><td><b>ID:</b> ".$row['id']."</td><td><b>Neighborhood: </b>".$row['neighborhood']."</td><td><b>Address: </b>".$row['address']."</td></tr>";
+						$rowID++;
+						echo "<tr id='".$rowID."' class='hide' name='results-sublist' onclick='toggle(". ($rowID - 1) .", ". ($rowID).")'><td><b>Latitude: </b>".$row['latitude']."</td><td><b>longitude: </b>".$row['longitude']."</td><td><b>Review Count: </b>".$row['review_count']."</td><td><b>".$open."</b></td></tr>";
+						$rowID++;
+
+					}
+
+					echo "</table>";
+					mysqli_free_result($result);
+				}else{
+					echo "<table style='width:100%''> <tr><th></th><th></th><th></th><th></th></tr></th></tr>";
 
 				}
-
-				echo "</table>";
-				mysqli_free_result($result);
-			}else{
-				echo "<table style='width:100%''> <tr><th></th><th></th><th></th><th></th></tr></th></tr>";
-
-			}
-			echo "</div>";
+				echo "</div>";
 
 
 
-			mysqli_close($link);
-			?>
-		</div>
-	</body>
-	</html>
+				mysqli_close($link);
+				?>
+			</div>
+		</body>
+		</html>
 
 
