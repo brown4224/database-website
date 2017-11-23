@@ -1,19 +1,23 @@
+function toggle(row, num){
+    row++;
+    num--;  // Remove first row.
 
-function toggle(id_1, id_2){
-    if(document.getElementById(id_1).classList.contains('hide')){
-        document.getElementById(id_1).className = "row jumbotron";
-        document.getElementById(id_2).className = "row jumbotron";
+    if(document.getElementById(row).classList.contains('hide')){
+        var $val = "row jumbotron";
     } else{
-        document.getElementById(id_1).className = "hide";
-        document.getElementById(id_2).className = "hide";
+        var $val = "hide";
     }
+
+    for(var i = 0; i< num; i++){
+        document.getElementById(row + i).className = $val;
+    }
+
 }
 
 
 function filter(query){
     console.log("start filter");
     if(query.length > 0){
-
         var list = document.getElementsByName('results');
         var sublist = document.getElementsByName('results-sublist');
         for (var i = 0; i< list.length; i++){
@@ -29,12 +33,9 @@ function filter(query){
             sublist[i].className = "hide"
         }
     } else{
-        console.log("show all");
         var list = document.getElementsByName('results');
         for (var i = 0; i< list.length; i++){
-            console.log(list);
-            console.log('true');
-            list[i].className = ""
+              list[i].className = ""
         }
     }
 }

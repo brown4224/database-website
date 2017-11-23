@@ -59,11 +59,22 @@
 
 
 
+
+<!-- <div class="show">
+<input id="review-text" type="text" name='review-text' class="form-control" placeholder="Please leave a review"  value=""></input>
+<div style="  display: flex; flex-direction: row;">
+<input id="review-stars"  type="number" name='review-stars' class="form-control" placeholder="stars"  value=""></input>
+<input id="review-useful"   type="number" name='review-useful' class="form-control" placeholder="useful"  value=""></input>
+<input id="review-funny"  type="number" name='review-funny' class="form-control" placeholder="funny"  value=""></input>
+<input id="review-cool"  type="number" name='review-cool' class="form-control" placeholder="cool"  value=""></input>
+</div>
+</div> -->
+
+
 		<?php
 				// Database
 $link = mysqli_connect("localhost:3306", "root", "pass", "yelp_db");  //Don't do this on production.... 
 			$safeSQL = mysqli_real_escape_string($link, $city);  // Escapes string
-			// $query = "select * from business where city like '%" .$safeSQL. "%' limit 20"; 
 
 			if(is_numeric($safeSQL)){
 				$query = "select * from business where postal_code like '" .$safeSQL. "' limit 20"; 
@@ -94,17 +105,40 @@ $link = mysqli_connect("localhost:3306", "root", "pass", "yelp_db");  //Don't do
 
   			// output data of each row
 				$rowID = 0;
+				$rowBlock = 0;
+				$numRows = 5;
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
-
-
-						echo "<tr class='' name='results' id='". $row['name']."'  onclick='toggle(". ($rowID + 1) .", ". ($rowID + 2).")'> <td>" . $row[$val_1] . "</td><td>" . $row[$val_2] . "</td><td>" . $row[$val_3] . "</td><td>" . $row[$val_4] .  "</td><td>".$row[$val_5]."</td></tr>";
+						$rowBlock = $rowID ;
+						// Row 1:  Bussiness Name
+						echo "<tr class='' name='results' id='". $row['name']."'  onclick='toggle(". ($rowBlock) .", ". ($numRows).")'> <td>" . $row[$val_1] . "</td><td>" . $row[$val_2] . "</td><td>" . $row[$val_3] . "</td><td>" . $row[$val_4] .  "</td><td>".$row[$val_5]."</td></tr>";
 						$rowID++;
 						if($row['is_open'] == 1){$open = 'Open';} else{$open = 'Closed';}
-						echo "<tr id='".$rowID."'  class='hide' name='results-sublist'  onclick='toggle(". ($rowID) .", ". ($rowID + 1).")'><td><b>ID:</b> ".$row['id']."</td><td><b>Neighborhood: </b>".$row['neighborhood']."</td><td><b>Address: </b>".$row['address']."</td></tr>";
+						// Row 2:  Bussiness Details
+						echo "<tr id='".$rowID."'  class='hide' name='results-sublist'  onclick='toggle(". ($rowBlock) .", ". ($numRows).")'><td><b>ID:</b> ".$row['id']."</td><td><b>Neighborhood: </b>".$row['neighborhood']."</td><td><b>Address: </b>".$row['address']."</td></tr>";
 						$rowID++;
-						echo "<tr id='".$rowID."' class='hide' name='results-sublist' onclick='toggle(". ($rowID - 1) .", ". ($rowID).")'><td><b>Latitude: </b>".$row['latitude']."</td><td><b>longitude: </b>".$row['longitude']."</td><td><b>Review Count: </b>".$row['review_count']."</td><td><b>".$open."</b></td></tr>";
+						// Row 3:  Bussiness Details
+						echo "<tr id='".$rowID."' class='hide' name='results-sublist' onclick='toggle(". ($rowBlock) .", ". ($numRows).")'><td><b>Latitude: </b>".$row['latitude']."</td><td><b>longitude: </b>".$row['longitude']."</td><td><b>Review Count: </b>".$row['review_count']."</td><td><b>".$open."</b></td></tr>";
 						$rowID++;
+
+						// INPUT Form
+						// Row 4: Review Text
+						// echo "<div id='".$rowID."' name='results-sublist' class=''>";
+						echo "<tr id='".$rowID."' class='hide' name='results-sublist'  onclick='toggle(". ($rowBlock) .", ". ($numRows).")'><td colspan='5' > <input id='review-text' type='text' name='review-text' class='form-control' placeholder='Please leave a review'  value=''></input></td></tr>";  // Row 1
+						$rowID++;
+						// Row 5: Review numerical values
+						echo "<tr id='".$rowID."'    class='hide' name='results-sublist' onclick='toggle(". ($rowBlock) .", ". ($numRows).")'> <td  colspan='5'  >";
+						echo "<div style='display: flex; flex-direction: row;'>";
+						echo "<input id='review-stars'  type='number' name='review-stars' class='form-control' placeholder='stars'  value=''></input>";
+						echo "<input id='review-useful'   type='number' name='review-useful' class='form-control' placeholder='useful'  value=''></input>";
+						echo "<input id='review-funny'  type='number' name='review-funny' class='form-control' placeholder='funny'  value=''></input>";
+						echo "<input id='review-cool'  type='number' name='review-cool' class='form-control' placeholder='cool'  value=''></input>";
+						echo "</td></tr>";
+						echo "</div>";
+						// echo "</div>";
+						$rowID++;
+						
+
 
 					}
 
